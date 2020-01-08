@@ -80,11 +80,58 @@ class DoublyLinkedList{
     }
     
     func delete(_ data:Int) -> Int {
+        var curNode:Node?
+        if head!.data == data{
+            curNode=head
+            head=head?.next
+            head?.pre=nil
+            curNode=nil
+        } else if tail!.data == data{
+            curNode=tail
+            tail=tail?.pre
+            tail?.next=nil
+            curNode=nil
+        } else{
+            curNode=head
+            while curNode!.data != data{
+                curNode=curNode?.next
+            }
+            curNode?.pre?.next=curNode?.next
+            curNode?.next?.pre=curNode?.pre
+            curNode=nil
+        }
         numOfNodes-=1
         return 0
     }
     
-    func delete(index:Int) -> Int{
+    func delete(targetIndex:Int) -> Int{
+        var curNode:Node?
+        if targetIndex == 0 {
+            curNode=head
+            head=head?.next
+            head?.pre=nil
+            curNode=nil
+        } else if targetIndex >= numOfNodes-1{
+            curNode=tail
+            tail=tail?.pre
+            tail?.next=nil
+            curNode=nil
+        } else{
+            if targetIndex < numOfNodes/2 {
+                curNode=head
+                for _ in 0..<targetIndex{
+                    curNode=curNode?.next
+                }
+            } else{
+                curNode=tail
+                for _ in 0..<numOfNodes-1-targetIndex{
+                    curNode=curNode?.pre
+                }
+            }
+            curNode?.pre?.next=curNode?.next
+            curNode?.next?.pre=curNode?.pre
+            curNode=nil
+        }
         numOfNodes-=1
         return 0
     }
@@ -98,5 +145,3 @@ class DoublyLinkedList{
         print()
     }
 }
-
-var doublyLinkedList=DoublyLinkedList()
