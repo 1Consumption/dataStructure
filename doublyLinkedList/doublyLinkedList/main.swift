@@ -144,4 +144,13 @@ class DoublyLinkedList{
         }
         print()
     }
+    
+    func printListReverse(){
+        var curNode=tail
+        while curNode != nil {
+            print("\(curNode!.data) ->",terminator:" ")
+            curNode=curNode?.pre
+        }
+        print()
+    }
 }
