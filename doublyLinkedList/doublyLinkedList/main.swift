@@ -49,10 +49,32 @@ class DoublyLinkedList{
     }
     
     func insert(_ data:Int,_ targetIndex:Int){
+        let node:Node = Node(data)
         if targetIndex == 0{
-            
+            node.next=head
+            head?.pre=node
+            head=node
+        } else if targetIndex >= self.numOfNodes {
+            node.pre=tail
+            tail?.next=node
+            tail=node
         } else{
-            
+            var curNode:Node?
+            if targetIndex < numOfNodes/2 {
+                curNode=head
+                for _ in 0..<targetIndex{
+                    curNode=curNode?.next
+                }
+            } else{
+                curNode=tail
+                for _ in 0..<numOfNodes-1-targetIndex{
+                    curNode=curNode?.pre
+                }
+            }
+            curNode?.pre?.next=node
+            node.pre=curNode?.pre
+            node.next=curNode
+            curNode?.pre=node
         }
         numOfNodes+=1
     }
