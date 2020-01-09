@@ -45,95 +45,103 @@ class DoublyLinkedList{
             self.tail?.next=node
             self.tail=self.tail?.next
         }
-        numOfNodes+=1
+        self.numOfNodes+=1
     }
     
     func insert(_ data:Int,_ targetIndex:Int){
         let node:Node = Node(data)
         if targetIndex == 0{
-            node.next=head
-            head?.pre=node
-            head=node
+            node.next=self.head
+            self.head?.pre=node
+            self.head=node
         } else if targetIndex >= self.numOfNodes {
-            node.pre=tail
-            tail?.next=node
-            tail=node
+            node.pre=self.tail
+            self.tail?.next=node
+            self.tail=node
         } else{
             var curNode:Node?
-            if targetIndex < numOfNodes/2 {
-                curNode=head
-                for _ in 0..<targetIndex{
-                    curNode=curNode?.next
-                }
-            } else{
-                curNode=tail
-                for _ in 0..<numOfNodes-1-targetIndex{
-                    curNode=curNode?.pre
-                }
-            }
+            curNode=searchNode(targetIndex)
             curNode?.pre?.next=node
             node.pre=curNode?.pre
             node.next=curNode
             curNode?.pre=node
         }
-        numOfNodes+=1
+        self.numOfNodes+=1
     }
     
     func delete(_ data:Int) -> Int {
         var curNode:Node?
-        if head!.data == data{
-            curNode=head
-            head=head?.next
-            head?.pre=nil
-            curNode=nil
-        } else if tail!.data == data{
-            curNode=tail
-            tail=tail?.pre
-            tail?.next=nil
-            curNode=nil
-        } else{
-            curNode=head
-            while curNode!.data != data{
-                curNode=curNode?.next
+        var deleteValue:Int=0
+        if hasValue(data){
+            if self.head!.data == data{
+                curNode=self.head
+                deleteValue=curNode!.data
+                self.head=head?.next
+                self.head?.pre=nil
+                curNode=nil
+            } else if self.tail!.data == data{
+                curNode=self.tail
+                deleteValue=curNode!.data
+                self.tail=self.tail?.pre
+                self.tail?.next=nil
+                curNode=nil
+            } else{
+                curNode=self.head
+                while curNode!.data != data{
+                    curNode=curNode?.next
+                }
+                deleteValue=curNode!.data
+                curNode?.pre?.next=curNode?.next
+                curNode?.next?.pre=curNode?.pre
+                curNode=nil
             }
-            curNode?.pre?.next=curNode?.next
-            curNode?.next?.pre=curNode?.pre
-            curNode=nil
+            self.numOfNodes-=1
+        } else{
+            print("해당 값은 없습니다.")
         }
-        numOfNodes-=1
-        return 0
+        return deleteValue
     }
     
     func delete(targetIndex:Int) -> Int{
         var curNode:Node?
+        var deleteValue:Int=0
         if targetIndex == 0 {
-            curNode=head
-            head=head?.next
-            head?.pre=nil
+            curNode=self.head
+            deleteValue=curNode!.data
+            self.head=head?.next
+            self.head?.pre=nil
             curNode=nil
-        } else if targetIndex >= numOfNodes-1{
-            curNode=tail
-            tail=tail?.pre
-            tail?.next=nil
+        } else if targetIndex >= self.numOfNodes-1{
+            curNode=self.tail
+            deleteValue=curNode!.data
+            self.tail=self.tail?.pre
+            self.tail?.next=nil
             curNode=nil
         } else{
-            if targetIndex < numOfNodes/2 {
-                curNode=head
-                for _ in 0..<targetIndex{
-                    curNode=curNode?.next
-                }
-            } else{
-                curNode=tail
-                for _ in 0..<numOfNodes-1-targetIndex{
-                    curNode=curNode?.pre
-                }
-            }
+            curNode=searchNode(targetIndex)
+            deleteValue=curNode!.data
             curNode?.pre?.next=curNode?.next
             curNode?.next?.pre=curNode?.pre
             curNode=nil
         }
-        numOfNodes-=1
-        return 0
+        self.numOfNodes-=1
+        return deleteValue
+    }
+    
+    func searchNode(_ targetIndex:Int) -> Node?{
+        var curNode:Node?
+        if targetIndex < self.numOfNodes/2 {
+            curNode=self.head
+            for _ in 0..<targetIndex{
+                curNode=curNode?.next
+            }
+        } else{
+            curNode=tail
+            for _ in 0..<self.numOfNodes-1-targetIndex{
+                curNode=curNode?.pre
+            }
+        }
+        return curNode
     }
     
     func printList(){
@@ -152,5 +160,16 @@ class DoublyLinkedList{
             curNode=curNode?.pre
         }
         print()
+    }
+    
+    func hasValue(_ data:Int) -> Bool{
+        var curNode=head
+        while curNode != nil{
+            if curNode!.data == data{
+                return true
+            }
+            curNode=curNode?.next
+        }
+        return false
     }
 }
