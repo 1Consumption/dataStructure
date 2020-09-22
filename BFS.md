@@ -12,7 +12,8 @@ protocol Nodeable {
     var isVisited: Bool { get set }
 }
 
-func BFS<T: Nodeable>(nodes: inout [T], index: Int, willVisit: inout [Int]) {
+func BFS<T: Nodeable>(nodes: inout [T], index: Int) {
+    var willVisit: [Int] = [Int]()
     nodes[index].isVisited = true
     print(nodes[index].id)
     willVisit.append(contentsOf: nodes[index].adjacentNodes)
@@ -45,6 +46,5 @@ nodes.append(Node(id: 6, adjacentNodes: [3]))
 nodes.append(Node(id: 7, adjacentNodes: [4]))
 nodes.append(Node(id: 8, adjacentNodes: [4]))
 
-var willVisit = [Int]()
-BFS(nodes: &nodes, index: 0, willVisit: &willVisit)
+BFS(nodes: &nodes, index: 0)
 ```
